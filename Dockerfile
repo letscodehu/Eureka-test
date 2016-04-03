@@ -10,7 +10,11 @@ RUN npm install
 COPY app.js /usr/src/
 COPY test /usr/src/test
 COPY script /usr/src/script
+# add execute priv to test
+RUN chmod +x /usr/src/test
+
 # user to non-privileged user
+
 USER nobody
 # Expose the application port and run application
 EXPOSE 5000
