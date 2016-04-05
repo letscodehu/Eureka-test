@@ -10,8 +10,8 @@ var euClient = new eureka({
     instance: {
         app: 'rucsokservice',
         hostName: 'localhost',
-        ipAddr: '127.0.0.1',
-        port: 5000,
+        ipAddr: process.env.DOCKER_HOST || '127.0.0.1',
+        port: process.env.DOCKER_PORT || 5000,
         vipAddress: 'jq.test.something.com',
         dataCenterInfo: {
             name: 'MyOwn'
