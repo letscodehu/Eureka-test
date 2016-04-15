@@ -9,7 +9,7 @@ var euClient = new eureka({
     // application instance information
     instance: {
         app: 'rucsokservice',
-        hostName: 'localhost',
+        hostName: 'lofasz',
         ipAddr: process.env.DOCKER_HOST || '127.0.0.1',
         port: process.env.DOCKER_PORT || 5000,
         vipAddress: 'jq.test.something.com',
@@ -29,7 +29,7 @@ euClient.start();
 var app = express();
 
 app.get('/', function (req, res) {
-    res.send('hello jenkins');
+    res.send('hello jenkins! I\'m listening on port:  ' + process.env.DOCKER_PORT );
 });
 
 app.listen(process.env.PORT || 5000);
