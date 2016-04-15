@@ -29,7 +29,7 @@ euClient.start();
 var app = express();
 
 app.get('/', function (req, res) {
-    res.send('hello jenkins! I\'m listening on port:  ' + process.env.DOCKER_PORT );
+    res.send('hello jenkins! I\'m listening on port:  ' + process.env.DOCKER_PORT || "" );
 });
 
 app.listen(process.env.PORT || 5000);
