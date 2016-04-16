@@ -12,7 +12,7 @@ var euClient = new eureka({
         app: "balancer",
         hostName: md5(Date.now()),
         ipAddr: '127.0.0.1',
-        port: 8000,
+        port: 5000,
         vipAddress: 'jq.test.something.com',
         dataCenterInfo: {
             name: 'MyOwn'
@@ -48,7 +48,7 @@ function getWorkingInstance(name) {
 var i = 0;
 http.createServer(function (req, res) {
     var instances = getWorkingInstance("aggregatorService");
-    i = (i + 1) % instances.length;
+    i = Math.floor(Math.random() * (instances.length - 1));
     console.log(instances);
     var request = http.get({
         "host" : instances[i].host,
@@ -63,4 +63,4 @@ http.createServer(function (req, res) {
     });
 
     request.end();
-}).listen(8000);
+}).listen(5000);

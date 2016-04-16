@@ -12,11 +12,12 @@ var http = require("http");
 
 var app = express();
 
+var hostName = md5(Date.now());
 var euClient = new eureka({
     // application instance information
     instance: {
         app: config.serviceName,
-        hostName: md5(Date.now()),
+        hostName: hostName,
         ipAddr: process.env.DOCKER_HOST,
         port: process.env.DOCKER_PORT,
         vipAddress: 'jq.test.something.com',
@@ -88,6 +89,7 @@ app.get("/", function(req, res) {
     Promise.all([product, account, order]).then(function(values) {
         var responseObj = {};
         values.forEach(function(item) {
+            responseObj.hostId = hostName;
             responseObj[item.key] = item.data;
         });
         res.end(JSON.stringify(responseObj));
