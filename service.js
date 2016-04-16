@@ -1,7 +1,7 @@
 // a service típusa
 var serviceType = process.argv.pop();
 
-var port = 5005;
+var port = 5000;
 
 var express = require('express');
 // eureka kliensünk
