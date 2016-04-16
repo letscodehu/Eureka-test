@@ -50,12 +50,17 @@ http.createServer(function (req, res) {
     var instances = getWorkingInstance("aggregatorService");
     i = (i + 1) % instances.length;
     console.log(instances);
-    http.get({
+    var request = http.get({
         "host" : instances[i].host,
         "port" : instances[i].port
     },function(response) {
         response.pipe(res);
-    }, function(err) {
-        console.log(err);
-    }).end();
-}).listen(5000);
+    });
+    request.on("error", function() {
+        res.end(JSON.stringify({
+            "error" : "Unable to serve your request!"
+        }));
+    });
+
+    request.end();
+}).listen(8000);
