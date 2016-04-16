@@ -47,8 +47,8 @@ var euClient = new eureka({
     instance: {
         app: config.serviceName,
         hostName: md5(Date.now()),
-        ipAddr: process.env.DOCKER_HOST || '127.0.0.1',
-        port: process.env.DOCKER_PORT || port,
+        ipAddr: process.env.DOCKER_HOST,
+        port: process.env.DOCKER_PORT,
         vipAddress: 'jq.test.something.com',
         dataCenterInfo: {
             name: 'MyOwn'

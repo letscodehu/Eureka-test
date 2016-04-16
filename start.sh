@@ -1,6 +1,18 @@
 #! /bin/sh
 
-DOCKER_HOST=172.17.42.1
+DOCKER_HOST='172.17.42.1'
+
+cp AccountServiceDockerfile Dockerfile
+docker build -t account-service .
+cp ProductServiceDockerfile Dockerfile
+docker build -t product-service .
+cp OrderServiceDockerfile Dockerfile
+docker build -t order-service .
+cp AggregatorServiceDockerfile Dockerfile
+docker build -t aggregator-service .
+cp BalancerServiceDockerfile Dockerfile
+docker build -t balancer-service .
+
 
 docker run -d -p  13333:5000 -e DOCKER_HOST=$DOCKER_HOST -e DOCKER_PORT=13333 --name product_1 product-service
 docker run -d -p  13334:5000 -e DOCKER_HOST=$DOCKER_HOST -e DOCKER_PORT=13334 --name product_2 product-service

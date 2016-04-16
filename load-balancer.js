@@ -38,7 +38,7 @@ function getWorkingInstance(name) {
                 return;
             }
             ret.push({
-                "host" : instance.host,
+                "host" : (instance.host !== '127.0.0.1') ? instance.host : process.env.DOCKER_HOST,
                 "port" : instance.port.$
             });
         });
@@ -49,10 +49,13 @@ var i = 0;
 http.createServer(function (req, res) {
     var instances = getWorkingInstance("aggregatorService");
     i = (i + 1) % instances.length;
+    console.log(instances);
     http.get({
         "host" : instances[i].host,
         "port" : instances[i].port
     },function(response) {
         response.pipe(res);
+    }, function(err) {
+        console.log(err);
     }).end();
 }).listen(5000);
