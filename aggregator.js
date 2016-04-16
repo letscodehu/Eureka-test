@@ -51,7 +51,7 @@ function getWorkingInstance(name) {
 
 function getPromiseWithData(hostPortConfig, fieldName) {
     return new Promise(function(resolve, reject) {
-        http.get({
+        var request = http.get({
             "host":  (hostPortConfig.ipAddr !== '127.0.0.1') ? hostPortConfig.ipAddr : process.env.DOCKER_HOST,
             "port": hostPortConfig.port.$,
             "path": "/"
@@ -67,7 +67,12 @@ function getPromiseWithData(hostPortConfig, fieldName) {
                 };
                 resolve(response);
             });
-        }).end();
+        });
+        request.on("error", function(err) {
+            reject(err);
+        });
+
+        request.end();
     });
 }
 
