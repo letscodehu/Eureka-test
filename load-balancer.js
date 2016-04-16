@@ -38,7 +38,7 @@ function getWorkingInstance(name) {
                 return;
             }
             ret.push({
-                "host" : (instance.host !== '127.0.0.1') ? instance.host : process.env.DOCKER_HOST,
+                "host" : (instance.ipAddr !== '127.0.0.1') ? instance.ipAddr : process.env.DOCKER_HOST,
                 "port" : instance.port.$
             });
         });
