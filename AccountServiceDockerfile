@@ -15,4 +15,4 @@ COPY service.js /usr/src/
 USER nobody
 # Expose the application port and run application
 EXPOSE 5000
-CMD ["node","service.js", "products"]
+CMD ["node","service.js", "accounts"]

@@ -17,8 +17,8 @@ var euClient = new eureka({
     instance: {
         app: config.serviceName,
         hostName: md5(Date.now()),
-        ipAddr: process.env.DOCKER_HOST || '127.0.0.1',
-        port: process.env.DOCKER_PORT || 5000,
+        ipAddr: process.env.DOCKER_HOST,
+        port: process.env.DOCKER_PORT,
         vipAddress: 'jq.test.something.com',
         dataCenterInfo: {
             name: 'MyOwn'
@@ -52,7 +52,7 @@ function getWorkingInstance(name) {
 function getPromiseWithData(hostPortConfig, fieldName) {
     return new Promise(function(resolve, reject) {
         http.get({
-            "host": hostPortConfig.host,
+            "host":  (hostPortConfig.host !== '127.0.0.1') ? hostPortConfig.host : process.env.DOCKER_HOST,
             "port": hostPortConfig.port.$,
             "path": "/"
         }, function(response) {
