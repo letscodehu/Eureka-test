@@ -27,32 +27,35 @@ var euClient = new eureka({
 
 euClient.start();
 
-
+// a kezdőindex
+var i = 0;
+// ez fog kidobni nekünk egy instance-t a service-ből
 function getWorkingInstance(name) {
     var instances = euClient.getInstancesByAppId(name);
     var ret = [];
-    if (instances) {
 
+    if (instances) {
+        // előszűrűnk, hogy csak a működőek legyenek benne
         instances.forEach(function(instance) {
             if (instance.status !== "UP") {
                 return;
             }
             ret.push({
-                "host" : (instance.ipAddr !== '127.0.0.1') ? instance.ipAddr : process.env.DOCKER_HOST,
+                // csak a host és a port érdekel minket
+                "host" : instance.ipAddr,
                 "port" : instance.port.$
             });
         });
     }
-    return ret;
+    i = (i >= ret.length) ? 0 : (i + 1);
+    return ret[i];
 }
-var i = 0;
+
 http.createServer(function (req, res) {
-    var instances = getWorkingInstance("aggregatorService");
-    i = Math.floor(Math.random() * (instances.length - 1));
-    console.log(instances);
+    var instance = getWorkingInstance("aggregatorService");
     var request = http.get({
-        "host" : instances[i].host,
-        "port" : instances[i].port
+        "host" : instance.host,
+        "port" : instance.port
     },function(response) {
         response.pipe(res);
     });
