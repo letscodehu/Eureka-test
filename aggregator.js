@@ -34,27 +34,35 @@ var euClient = new eureka({
 
 euClient.start();
 
-
+// a kezdőindex
+var i = 0;
+// ez fog kidobni nekünk egy instance-t a service-ből
 function getWorkingInstance(name) {
     var instances = euClient.getInstancesByAppId(name);
-    var ret;
-    if (instances) {
+    var ret = [];
 
+    if (instances) {
+        // előszűrűnk, hogy csak a működőek legyenek benne
         instances.forEach(function(instance) {
             if (instance.status !== "UP") {
                 return;
             }
-            ret = instance;
+            ret.push({
+                // csak a host és a port érdekel minket
+                "host" : instance.ipAddr,
+                "port" : instance.port.$
+            });
         });
     }
-    return ret;
+    i = (i >= ret.length) ? 0 : (i + 1);
+    return ret[i];
 }
 
 function getPromiseWithData(hostPortConfig, fieldName) {
     return new Promise(function(resolve, reject) {
         var request = http.get({
-            "host":  (hostPortConfig.ipAddr !== '127.0.0.1') ? hostPortConfig.ipAddr : process.env.DOCKER_HOST,
-            "port": hostPortConfig.port.$,
+            "host":  hostPortConfig.host,
+            "port": hostPortConfig.port,
             "path": "/"
         }, function(response) {
             var data = "";
