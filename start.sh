@@ -1,6 +1,25 @@
 #! /bin/sh
 
-DOCKER_HOST='172.17.42.1'
+DOCKER_HOST=172.17.42.1
+
+# MySQL
+docker run -d -p 12805:3306 --name accounts_mysql -e MYSQL_ROOT_PASSWORD=password mysql:latest
+docker run -d -p 12806:3306 --name products_mysql -e MYSQL_ROOT_PASSWORD=password mysql:latest
+docker run -d -p 12807:3306 --name orders_mysql -e MYSQL_ROOT_PASSWORD=password mysql:latest
+
+# Redis
+
+docker run -d -p 10564:6379 --name accounts-redis redis
+docker run -d -p 10565:6379 --name products-redis redis
+docker run -d -p 10566:6379 --name orders-redis redis
+
+sleep 180 # Wait for MySQL to get it's shit together
+
+cat accounts.sql | mysql --host=0.0.0.0 --port=12805 --password=password
+cat products.sql | mysql --host=0.0.0.0 --port=12806 --password=password
+cat orders.sql | mysql --host=0.0.0.0 --port=12807 --password=password
+
+# Build services
 
 cp AccountServiceDockerfile Dockerfile
 docker build -t account-service .
@@ -13,7 +32,7 @@ docker build -t aggregator-service .
 cp BalancerServiceDockerfile Dockerfile
 docker build -t balancer-service .
 
-
+# Run services
 docker run -d -p  13333:5000 -e DOCKER_HOST=$DOCKER_HOST -e DOCKER_PORT=13333 --name product_1 product-service
 docker run -d -p  13334:5000 -e DOCKER_HOST=$DOCKER_HOST -e DOCKER_PORT=13334 --name product_2 product-service
 docker run -d -p  13335:5000 -e DOCKER_HOST=$DOCKER_HOST -e DOCKER_PORT=13335 --name product_3 product-service

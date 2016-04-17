@@ -54,7 +54,7 @@ function getWorkingInstance(name) {
             });
         });
     }
-    i = (i >= ret.length) ? 0 : (i + 1);
+    i = (i >= ret.length -1 ) ? 0 : (i + 1);
     return ret[i];
 }
 
